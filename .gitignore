@@ -1,0 +1,33 @@
+# ==== Node modules ====
+node_modules/
+todo-frontend/node_modules/
+todo-backend/node_modules/
+
+# ==== Build outputs ====
+dist/
+build/
+todo-frontend/dist/
+todo-backend/dist/
+
+# ==== Environment variables ====
+.env
+.env.local
+todo-frontend/.env
+todo-backend/.env
+
+# ==== Logs ====
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==== Editor config ====
+.vscode/
+.idea/
+
+# ==== TypeScript ====
+*.tsbuildinfo
+
+# ==== Coverage ====
+coverage/
+todo-backend/coverage/
