@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import { User } from '../models/User';
 import dotenv from 'dotenv';
 
@@ -7,8 +7,8 @@ dotenv.config();
 
 const router = Router();
 
-// Fix: always use string for JWT_SECRET and JWT_EXPIRES_IN
-const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
+// Ensure JWT_SECRET is Secret type for jwt.sign compatibility
+const JWT_SECRET: Secret = process.env.JWT_SECRET || 'default_secret';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
 
 // GET usage info for register
