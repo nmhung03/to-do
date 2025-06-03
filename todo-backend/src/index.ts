@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: '*', // hoặc thay bằng domain frontend nếu muốn bảo mật hơn
+  origin: 'https://to-do-frontend-285u.onrender.com', // hoặc thay bằng domain frontend nếu muốn bảo mật hơn
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
