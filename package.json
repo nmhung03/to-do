@@ -20,5 +20,9 @@
     "mongodb"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/jsonwebtoken": "^8.5.9",
+    "jsonwebtoken": "^8.5.1"
+  }
 }
