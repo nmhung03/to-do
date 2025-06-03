@@ -7,6 +7,10 @@ dotenv.config();
 
 const router = Router();
 
+// Fix: always use string for JWT_SECRET and JWT_EXPIRES_IN
+const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
+
 // GET usage info for register
 router.get('/register', (req, res) => {
   res.json({ message: 'Send a POST request to this endpoint with username, email, and password' });
@@ -30,7 +34,7 @@ router.post('/register', async (req: Request, res: Response) => {
     }
     const user = new User({ username, email, password });
     await user.save();
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRES_IN });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
     res.status(201).json({ token });
   } catch (error) {
     console.error('Error registering user:', error);
@@ -53,7 +57,7 @@ router.post('/login', async (req: Request, res: Response) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRES_IN });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
     res.json({ token });
   } catch (error) {
     console.error('Error logging in:', error);
