@@ -7,6 +7,7 @@ export interface ITask extends Document {
   updatedAt: Date;
   priority?: 'low' | 'medium' | 'high';
   description?: string;
+  owner: mongoose.Schema.Types.ObjectId; // Reference to the User model
 }
 
 const taskSchema = new Schema<ITask>({
@@ -38,6 +39,11 @@ const taskSchema = new Schema<ITask>({
   updatedAt: {
     type: Date,
     default: Date.now
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true, // Automatically manage createdAt and updatedAt

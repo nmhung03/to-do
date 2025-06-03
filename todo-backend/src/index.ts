@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import taskRouters from './routes/tasks';
+import authRouters from './routes/auth';
 import { dbConnection } from './config/database';
+import { authMiddleware } from './middleware/auth';
 
 dotenv.config();
 
@@ -23,8 +25,11 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Mount router
-app.use('/api/tasks', taskRouters);
+// Mount auth router
+app.use('/api/auth', authRouters);
+
+// Protect task routes
+app.use('/api/tasks', authMiddleware, taskRouters);
 
 // Start server function
 async function startServer() {

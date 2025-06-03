@@ -11,6 +11,15 @@ const api = axios.create({
   },
 });
 
+// Attach JWT token to each request if exists
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const taskService = {
   // Lấy tất cả tasks
   getAllTasks: async (): Promise<Task[]> => {

@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Task } from './types/Task';
 import { taskService } from './services/taskService';
+import AuthForm from './components/AuthForm';
 import AddTask from './components/AddTask';
 import TaskList from './components/TaskList';
 
 function App() {
+  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
   // Lấy danh sách tasks khi component mount
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    if (token) fetchTasks();
+  }, [token]);
 
   const fetchTasks = async () => {
     try {
@@ -26,6 +28,11 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAuth = (newToken: string) => {
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
   };
 
   const handleAddTask = async (title: string) => {
@@ -65,24 +72,38 @@ function App() {
     }
   };
 
+  // Logout user by clearing token
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+  };
+
   const completedCount = tasks.filter(task => task.completed).length;
   const totalCount = tasks.length;
+
+  // If not authenticated, show AuthForm
+  if (!token) return <AuthForm onAuth={handleAuth} />;
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-2xl mx-auto px-4">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            📝 Todo App
-          </h1>
-          <p className="text-gray-600">
-            Quản lý công việc của bạn một cách hiệu quả
-          </p>
-          {totalCount > 0 && (
-            <div className="mt-4 text-sm text-gray-500">
-              Hoàn thành: {completedCount}/{totalCount} tasks
-            </div>
-          )}
+        <header className="flex justify-between items-center mb-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              📝 Todo App
+            </h1>
+            <p className="text-gray-600">
+              Quản lý công việc của bạn một cách hiệu quả
+            </p>
+            {totalCount > 0 && (
+              <div className="mt-4 text-sm text-gray-500">
+                Hoàn thành: {completedCount}/{totalCount} tasks
+              </div>
+            )}
+          </div>
+          <button onClick={handleLogout} className="text-red-500 hover:underline">
+            Đăng xuất
+          </button>
         </header>
 
         {error && (
